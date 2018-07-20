@@ -39,6 +39,10 @@ args.enumerated().forEach { index, arg in
         filePath = args[index + 1]
     case "-p":
         filePath = args[index + 1]
+    case "--config":
+        filePath = args[index + 1]
+    case "-c":
+        filePath = args[index + 1]
     default:
         break
     }
@@ -46,4 +50,10 @@ args.enumerated().forEach { index, arg in
 
 guard let filePath = filePath else { print("Missing --path/-p flag"); exit(1) }
 
+print("Running Swiftformat")
 shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
+
+guard let inputFile = inputFile else { print("Missing --config/-c flag"); exit(1) }
+
+print("Running Swiftlint Autocorrect")
+shell("swiftlint autocorrect --path \(filePath) --use-script-input-files \(inputFile)")
