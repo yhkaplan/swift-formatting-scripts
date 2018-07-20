@@ -31,6 +31,7 @@ let disabledRules: [String] = [
 ]
 
 var filePath: String?
+var configFile: String?
 
 let args = ProcessInfo.processInfo.arguments
 args.enumerated().forEach { index, arg in
@@ -40,9 +41,9 @@ args.enumerated().forEach { index, arg in
     case "-p":
         filePath = args[index + 1]
     case "--config":
-        filePath = args[index + 1]
+        configFile = args[index + 1]
     case "-c":
-        filePath = args[index + 1]
+        configFile = args[index + 1]
     default:
         break
     }
@@ -53,7 +54,7 @@ guard let filePath = filePath else { print("Missing --path/-p flag"); exit(1) }
 print("Running Swiftformat")
 shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
 
-guard let inputFile = inputFile else { print("Missing --config/-c flag"); exit(1) }
+guard let configFile = configFile else { print("Missing --config/-c flag"); exit(1) }
 
 print("Running Swiftlint Autocorrect")
-shell("swiftlint autocorrect --path \(filePath) --use-script-input-files \(inputFile)")
+shell("swiftlint autocorrect --path \(filePath) --use-script-input-files \(configFile)")
