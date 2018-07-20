@@ -1,0 +1,41 @@
++------------------------------------------+--------+-------------+------------------------+-------------+---------------+
+| identifier                               | opt-in | correctable | enabled in your config | kind        | configuration |
++------------------------------------------+--------+-------------+------------------------+-------------+---------------+
+| closing_brace                            | no     | yes         | yes                    | style       | warning       |
+| closure_spacing                          | yes    | yes         | no                     | style       | warning       |
+| colon                                    | no     | yes         | yes                    | style       | warning, f... |
+| comma                                    | no     | yes         | yes                    | style       | warning       |
+| empty_enum_arguments                     | no     | yes         | yes                    | style       | warning       |
+| empty_parameters                         | no     | yes         | yes                    | style       | warning       |
+| empty_parentheses_with_trailing_closure  | no     | yes         | yes                    | style       | warning       |
+| explicit_init                            | yes    | yes         | no                     | idiomatic   | warning       |
+| implicit_return                          | yes    | yes         | no                     | style       | warning       |
+| joined_default_parameter                 | yes    | yes         | no                     | idiomatic   | warning       |
+| leading_whitespace                       | no     | yes         | yes                    | style       | warning       |
+| legacy_cggeometry_functions              | no     | yes         | yes                    | idiomatic   | warning       |
+| legacy_constant                          | no     | yes         | yes                    | idiomatic   | warning       |
+| legacy_constructor                       | no     | yes         | yes                    | idiomatic   | warning       |
+| legacy_nsgeometry_functions              | no     | yes         | yes                    | idiomatic   | warning       |
+| mark                                     | no     | yes         | yes                    | lint        | warning       |
+| nimble_operator                          | yes    | yes         | no                     | idiomatic   | warning       |
+| number_separator                         | yes    | yes         | no                     | style       | warning, m... |
+| opening_brace                            | no     | yes         | yes                    | style       | warning       |
+| operator_usage_whitespace                | yes    | yes         | no                     | style       | warning       |
+| private_over_fileprivate                 | no     | yes         | yes                    | idiomatic   | warning, v... |
+| protocol_property_accessors_order        | no     | yes         | yes                    | style       | warning       |
+| redundant_discardable_let                | no     | yes         | yes                    | style       | warning       |
+| redundant_nil_coalescing                 | yes    | yes         | no                     | idiomatic   | warning       |
+| redundant_optional_initialization        | no     | yes         | yes                    | idiomatic   | warning       |
+| redundant_void_return                    | no     | yes         | yes                    | idiomatic   | warning       |
+| return_arrow_whitespace                  | no     | yes         | yes                    | style       | warning       |
+| sorted_imports                           | yes    | yes         | no                     | style       | warning       |
+| statement_position                       | no     | yes         | yes                    | style       | (statement... |
+| trailing_comma                           | no     | yes         | yes                    | style       | warning, m... |
+| trailing_newline                         | no     | yes         | yes                    | style       | warning       |
+| trailing_semicolon                       | no     | yes         | yes                    | idiomatic   | warning       |
+| trailing_whitespace                      | no     | yes         | yes                    | style       | warning, i... |
+| unneeded_parentheses_in_closure_argument | yes    | yes         | no                     | style       | warning       |
+| unused_closure_parameter                 | no     | yes         | yes                    | lint        | warning       |
+| vertical_whitespace                      | no     | yes         | yes                    | style       | warning, m... |
+| void_return                              | no     | yes         | yes                    | style       | warning       |
++------------------------------------------+--------+-------------+------------------------+-------------+---------------+
