@@ -4,7 +4,7 @@ import Foundation
 
 @discardableResult
 func shell(_ command: String) -> Int32 {
-    let args = command.split(" ")
+    let args = command.components(separatedBy: " ")
 
     let process = Process()
     process.launchPath = "/usr/bin/env"
@@ -16,13 +16,28 @@ func shell(_ command: String) -> Int32 {
 }
 
 let disabledRules: [String] = [
-
+    "consecutiveSpaces",
+    "trailingSpace",
+    "numberFormatting",
+    "blankLinesAtEndOfScope",
+    "blankLinesAtStartOfScope",
+    "strongOutlets",
+    "unusedArguments",
+    "hoistPatternLet",
+    "sortedImports",
+    "spaceAroundGenerics",
+    "trailingClosures",
+    "trailingCommas"
 ]
 
-guard let path = ProcessInfo.processInfo.arguments.first else {
-    print("File path not contained")
+let args = ProcessInfo.processInfo.arguments
+
+guard args.count > 4 else {
+    print("File path not specified")
     exit(1)
 }
 
-let exitStatus = shell("swiftformat --disable \(disabledRules.join(with: ",") \(path)")
-print(exitStatus)
+let filePath = args[3]
+
+let exitStatus = shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
+print("\(exitStatus)")
