@@ -1,4 +1,4 @@
-#!/bin/bash/env swift
+#!/usr/bin/swift
 
 import Foundation
 
@@ -30,14 +30,20 @@ let disabledRules: [String] = [
     "trailingCommas"
 ]
 
-let args = ProcessInfo.processInfo.arguments
+var filePath: String?
 
-guard args.count > 4 else {
-    print("File path not specified")
-    exit(1)
+let args = ProcessInfo.processInfo.arguments
+args.enumerated().forEach { index, arg in
+    switch arg {
+    case "--path":
+        filePath = args[index + 1]
+    case "-p":
+        filePath = args[index + 1]
+    default:
+        break
+    }
 }
 
-let filePath = args[3]
+guard let filePath = filePath else { print("Missing --path/-p flag"); exit(1) }
 
-let exitStatus = shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
-print("\(exitStatus)")
+shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
