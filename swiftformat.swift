@@ -57,4 +57,4 @@ shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)
 guard let configFile = configFile else { print("Missing --config/-c flag"); exit(1) }
 
 print("Running Swiftlint Autocorrect")
-shell("swiftlint autocorrect --path \(filePath) --use-script-input-files \(configFile)")
+shell("swiftlint autocorrect --path \(filePath) --config \(configFile)")
