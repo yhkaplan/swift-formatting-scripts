@@ -2,42 +2,17 @@
 
 import Foundation
 
-let launchPath = "/usr/bin/env"
-
 @discardableResult
 func shell(_ command: String) -> Int32 {
     let args = command.components(separatedBy: " ")
 
     let process = Process()
-    process.launchPath = launchPath
+    process.launchPath = "/usr/bin/env"
     process.arguments = args
     process.launch()
     process.waitUntilExit()
 
     return process.terminationStatus
-}
-
-func pipeOut(_ command: String) -> (Process, Pipe) {
-    let args = command.components(separatedBy: " ")
-    let pipe = Pipe()
-    let process = Process()
-
-    process.launchPath = launchPath
-    process.arguments = args
-    process.standardOutput = pipe
-
-    return (process: process, pipe: pipe)
-}
-
-func pipeIn(_ command: String, pipe: Pipe) -> Process {
-    let args = command.components(separatedBy: " ")
-    let process = Process()
-
-    process.launchPath = launchPath
-    process.arguments = args
-    process.standardInput = pipe
-
-    return process
 }
 
 let disabledRules: [String] = [
@@ -104,12 +79,4 @@ guard let configFile = configFile else {
 }
 
 print("Running Swiftlint Autocorrect")
-// Must call Swiftlint recursively on each swift file in filePath
-let (process1, pipe) = pipeOut("find \(filePath) -type f -print0")//-name \\*.swift
-let process2 = pipeIn("xargs -0 swiftlint autocorrect --config \(configFile) --path", pipe: pipe)
-
-let outputPipe = Pipe()
-process2.standardOutput = outputPipe
-process1.launch()
-process2.launch()
-process2.waitUntilExit()
+shell("swiftformat_autocorrect.sh --config \(configFile) --path \(filePath)")
