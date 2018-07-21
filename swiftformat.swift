@@ -79,4 +79,4 @@ guard let configFile = configFile else {
 }
 
 print("Running Swiftlint Autocorrect")
-shell("swiftformat_autocorrect.sh --config \(configFile) --path \(filePath)")
+shell("fd . -0 --full-path \(filePath) -e swift -x swiftlint autocorrect --config \(configFile) --path")
