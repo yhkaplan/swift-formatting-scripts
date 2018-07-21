@@ -106,10 +106,17 @@ guard let configFile = configFile else {
 print("Running Swiftlint Autocorrect")
 // Must call Swiftlint recursively on each swift file in filePath
 let (process1, pipe) = pipeOut("find \(filePath) -type f -print0")//-name \\*.swift
-let process2 = pipeIn("xargs -0 swiftlint autocorrect --config \(configFile) --path", pipe: pipe)
+let process2 = pipeIn("xargs -0 echo", pipe: pipe)//swiftlint autocorrect --config \(configFile) --path", pipe: pipe)
 
 let outputPipe = Pipe()
 process2.standardOutput = outputPipe
+
 process1.launch()
+// process1.waitUntilExit()
 process2.launch()
 process2.waitUntilExit()
+
+let data = outputPipe.fileHandleForReading.readDataToEndOfFile()
+let output = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+
+print(output ?? "error")
