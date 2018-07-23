@@ -71,6 +71,7 @@ guard let output = String(data: data, encoding: String.Encoding.utf8) else {
 let delimitedRules = output
     .replacingOccurrences(of: " ", with: "")
     .replacingOccurrences(of: "\(rule)\n", with: "")
+    .replacingOccurrences(of: "(disabled)", with: "")
     .replacingOccurrences(of: "\n", with: ",")
 
 // Swift 4 has one-sided ranges
