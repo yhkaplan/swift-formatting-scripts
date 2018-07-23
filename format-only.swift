@@ -5,18 +5,6 @@ import Foundation
 let launchPath = "/usr/bin/env"
 
 @discardableResult
-func shell(_ command: String) -> Int32 {
-    let args = command.components(separatedBy: " ")
-
-    let process = Process()
-    process.launchPath = launchPath
-    process.arguments = args
-    process.launch()
-    process.waitUntilExit()
-
-    return process.terminationStatus
-}
-
 func shellOut(_ command: String) -> Pipe {
     let args = command.components(separatedBy: " ")
 
@@ -29,6 +17,26 @@ func shellOut(_ command: String) -> Pipe {
     process.waitUntilExit()
 
     return stdout
+}
+
+// TODO: specifying the last rule leaves an extra comma at the end
+// TODO: Wrap string formatting in func
+func formatOutput(_ output: String, excluding excludedWord: String) -> String {
+    let delimited = output
+        .replacingOccurrences(of: " ", with: "")
+        .replacingOccurrences(of: "\(excludedWord)\n", with: "")
+        .replacingOccurrences(of: "(disabled)", with: "")
+        .replacingOccurrences(of: "\n", with: ",")
+
+    let beginning = ..<delimited.index(delimited.startIndex, offsetBy: 6)
+    let trimmedStart = delimited
+        .replacingCharacters(in: beginning, with: "")
+
+    let lastTwoChars = trimmedStart.index(trimmedStart.endIndex, offsetBy: -7)...
+    let trimmedEnd = trimmedStart
+        .replacingCharacters(in: lastTwoChars, with: "")
+
+    return trimmedEnd
 }
 
 var filePath: String?
@@ -62,26 +70,11 @@ guard let rule = rule else {
 
 let stdout = shellOut("swiftformat --rules")
 let data = stdout.fileHandleForReading.readDataToEndOfFile()
+
 guard let output = String(data: data, encoding: String.Encoding.utf8) else {
     print("Error: no output"); exit(1)
 }
 
-// TODO: specifying the last rule leaves an extra comma at the end
-// TODO: Wrap string formatting in func
-let delimitedRules = output
-    .replacingOccurrences(of: " ", with: "")
-    .replacingOccurrences(of: "\(rule)\n", with: "")
-    .replacingOccurrences(of: "(disabled)", with: "")
-    .replacingOccurrences(of: "\n", with: ",")
-
-// Swift 4 has one-sided ranges
-let beginning = ..<delimitedRules.index(delimitedRules.startIndex, offsetBy: 6)
-let rawDisabledRules = delimitedRules
-    .replacingCharacters(in: beginning, with: "")
-
-let lastTwoChars = rawDisabledRules.index(rawDisabledRules.endIndex, offsetBy: -7)...
-let disabledRules = rawDisabledRules
-    .replacingCharacters(in: lastTwoChars, with: "")
-
+let disabledRules = formatOutput(output, excluding: rule)
 print(disabledRules)
-shell("swiftformat --disable \(disabledRules) \(filePath)")
+// shellOut("swiftformat --disable \(disabledRules) \(filePath)")
