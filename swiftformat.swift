@@ -72,7 +72,7 @@ if shouldRunSwiftFormat {
     shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
 }
 
-guard shouldRunSwiftlint else { exit(1) }
+guard shouldRunSwiftlint else { exit(0) }
 
 guard let configFile = configFile else {
     print("Missing --config/-c flag"); exit(1)
