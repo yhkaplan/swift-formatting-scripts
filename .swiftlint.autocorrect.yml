@@ -31,7 +31,6 @@ opt_in_rules:
   - redundant_optional_initialization
   - redundant_void_return
   - return_arrow_whitespace
-  - sorted_imports
   - statement_position
   - trailing_comma
   - trailing_newline
