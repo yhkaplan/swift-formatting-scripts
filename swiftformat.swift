@@ -15,6 +15,7 @@ func shell(_ command: String) -> Int32 {
     return process.terminationStatus
 }
 
+// TODO: Move these to Swiftformat config file
 let disabledRules: [String] = [
     "consecutiveSpaces",
     "trailingSpace",
@@ -38,24 +39,16 @@ var shouldRunSwiftFormat = true
 let args = ProcessInfo.processInfo.arguments
 args.enumerated().forEach { index, arg in
     switch arg {
-    case "--path":
-        filePath = args[index + 1]
-    case "-p":
+    case "--path", "-p":
         filePath = args[index + 1]
 
-    case "--config":
-        configFile = args[index + 1]
-    case "-c":
+    case "--config", "-c":
         configFile = args[index + 1]
 
-    case "--swiftlint-only":
-        shouldRunSwiftFormat = false
-    case "-sl":
+    case "--swiftlint-only", "-sl":
         shouldRunSwiftFormat = false
 
-    case "--swiftformat-only":
-        shouldRunSwiftlint = false
-    case "-sf":
+    case "--swiftformat-only", "-sf":
         shouldRunSwiftlint = false
 
     default:
