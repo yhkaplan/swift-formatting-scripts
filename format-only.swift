@@ -20,40 +20,33 @@ func shellOut(_ command: String) -> Pipe {
 }
 
 // TODO: specifying the last rule leaves an extra comma at the end
-// TODO: Wrap string formatting in func
 func formatOutput(_ output: String, excluding excludedWord: String) -> String {
-    let delimited = output
+    let formattedSubstring = output
         .replacingOccurrences(of: " ", with: "")
         .replacingOccurrences(of: "\(excludedWord)\n", with: "")
         .replacingOccurrences(of: "(disabled)", with: "")
         .replacingOccurrences(of: "\n", with: ",")
+        .replacingOccurrences(of: ",,", with: "")
+        .dropFirst() // Drop initial comma
 
-    let beginning = ..<delimited.index(delimited.startIndex, offsetBy: 6)
-    let trimmedStart = delimited
-        .replacingCharacters(in: beginning, with: "")
-
-    let lastTwoChars = trimmedStart.index(trimmedStart.endIndex, offsetBy: -7)...
-    let trimmedEnd = trimmedStart
-        .replacingCharacters(in: lastTwoChars, with: "")
-
-    return trimmedEnd
+    return String(formattedSubstring)
 }
 
 var filePath: String?
 var rule: String?
+var isVerbose = false
 
 let args = ProcessInfo.processInfo.arguments
 args.enumerated().forEach { index, arg in
     switch arg {
-    case "--path":
-        filePath = args[index + 1]
-    case "-p":
+    case "--path", "-p":
         filePath = args[index + 1]
 
-    case "--rule":
+    case "--rule", "-r":
         rule = args[index + 1]
-    case "-r":
-        rule = args[index + 1]
+
+    case "--verbose", "-v":
+        isVerbose = true
 
     default:
         break
@@ -76,5 +69,14 @@ guard let output = String(data: data, encoding: String.Encoding.utf8) else {
 }
 
 let disabledRules = formatOutput(output, excluding: rule)
-print(disabledRules)
-// shellOut("swiftformat --disable \(disabledRules) \(filePath)")
+
+if isVerbose {
+    print(
+        """
+        Running rule: \(rule)
+        Disabling rules: \(disabledRules)
+        """
+    )
+}
+
+shellOut("swiftformat \(filePath) --disable \(disabledRules)")
