@@ -19,7 +19,6 @@ func shellOut(_ command: String) -> Pipe {
     return stdout
 }
 
-// TODO: specifying the last rule leaves an extra comma at the end
 func formatOutput(_ output: String, excluding excludedWord: String) -> String {
     let formattedSubstring = output
         .replacingOccurrences(of: " ", with: "")
@@ -68,7 +67,12 @@ guard let output = String(data: data, encoding: String.Encoding.utf8) else {
     print("Error: no output"); exit(1)
 }
 
-let disabledRules = formatOutput(output, excluding: rule)
+var disabledRules = formatOutput(output, excluding: rule)
+
+// Address case when last rule specified
+if let last = disabledRules.last, last  == "," {
+    disabledRules = String(disabledRules.dropLast())
+}
 
 if isVerbose {
     print(
