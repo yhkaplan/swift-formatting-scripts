@@ -1,5 +1,7 @@
 #!/usr/bin/swift
 
+/* fd is needed
+   brew install fd */
 import Foundation
 
 @discardableResult
@@ -15,24 +17,11 @@ func shell(_ command: String) -> Int32 {
     return process.terminationStatus
 }
 
-// TODO: Move these to Swiftformat config file
-let disabledRules: [String] = [
-    "consecutiveSpaces",
-    "trailingSpace",
-    "numberFormatting",
-    "blankLinesAtEndOfScope",
-    "blankLinesAtStartOfScope",
-    "strongOutlets",
-    "unusedArguments",
-    "hoistPatternLet",
-    "sortedImports",
-    "spaceAroundGenerics",
-    "trailingClosures",
-    "trailingCommas"
-]
-
 var filePath: String?
-var configFile: String?
+
+var swiftLintConfig = ".swiftlint.autocorrect.yml"
+var swiftFormatConfig = ".swiftformat"
+
 var shouldRunSwiftlint = true
 var shouldRunSwiftFormat = true
 
@@ -42,8 +31,11 @@ args.enumerated().forEach { index, arg in
     case "--path", "-p":
         filePath = args[index + 1]
 
-    case "--config", "-c":
-        configFile = args[index + 1]
+    case "--swiftlint-config", "-slc":
+        swiftLintConfig = args[index + 1]
+
+    case "--swiftformat-config", "-sfc":
+        swiftFormatConfig = args[index + 1]
 
     case "--swiftlint-only", "-sl":
         shouldRunSwiftFormat = false
@@ -61,15 +53,12 @@ guard let filePath = filePath else {
 }
 
 if shouldRunSwiftFormat {
-    print("Running Swiftformat")
-    shell("swiftformat --disable \(disabledRules.joined(separator: ",")) \(filePath)")
+    let swiftformat = "Pods/SwiftFormat/CommandLineTool/swiftformat"
+    shell("\(swiftformat) \(filePath) --config \(swiftFormatConfig)")
 }
 
 guard shouldRunSwiftlint else { exit(0) }
 
-guard let configFile = configFile else {
-    print("Missing --config/-c flag"); exit(1)
-}
-
 print("Running Swiftlint Autocorrect")
-shell("fd . -0 --full-path \(filePath) -e swift -x swiftlint autocorrect --config \(configFile) --path")
+let swiftlint = "Pods/SwiftLint/swiftlint"
+shell("fd . -0 --full-path \(filePath) -e swift -x \(swiftlint) autocorrect --config \(swiftLintConfig) --path")
