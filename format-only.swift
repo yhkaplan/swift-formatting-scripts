@@ -20,13 +20,18 @@ func shellOut(_ command: String) -> Pipe {
 }
 
 func formatOutput(_ output: String, excluding excludedWord: String) -> String {
-    let formattedSubstring = output
+    var formattedSubstring = output
         .replacingOccurrences(of: " ", with: "")
         .replacingOccurrences(of: "\(excludedWord)\n", with: "")
         .replacingOccurrences(of: "(disabled)", with: "")
         .replacingOccurrences(of: "\n", with: ",")
         .replacingOccurrences(of: ",,", with: "")
         .dropFirst() // Drop initial comma
+
+    // Address case when last rule specified
+    if let last = formattedSubstring.last, last  == "," {
+        formattedSubstring = formattedSubstring.dropLast()
+    }
 
     return String(formattedSubstring)
 }
@@ -67,12 +72,7 @@ guard let output = String(data: data, encoding: String.Encoding.utf8) else {
     print("Error: no output"); exit(1)
 }
 
-var disabledRules = formatOutput(output, excluding: rule)
-
-// Address case when last rule specified
-if let last = disabledRules.last, last  == "," {
-    disabledRules = String(disabledRules.dropLast())
-}
+let disabledRules = formatOutput(output, excluding: rule)
 
 if isVerbose {
     print(
