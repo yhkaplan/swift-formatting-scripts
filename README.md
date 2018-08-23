@@ -1,12 +1,16 @@
-# swiftformat.swift
+# format.swift
 
 > Format all the things
+
+# format-only.swift
+
+> Select certain SwiftFormat rule to format with
 
 This is a convenient script to run both Swiftformat and Swiftlint.
 
 ## Setting up
 
-Run `$ ./install-dependencies.sh`. This will brew install Swiftlint, Swiftformat, and fd (a super-performant Rust version of find).
+`brew install fd` (a super-performant Rust version of find)
 
 ## Usage
 
