@@ -60,5 +60,12 @@ if shouldRunSwiftFormat {
 guard shouldRunSwiftlint else { exit(0) }
 
 print("Running Swiftlint Autocorrect")
+
 let swiftlint = "Pods/SwiftLint/swiftlint"
-shell("fd . -0 --full-path \(filePath) -e swift -x \(swiftlint) autocorrect --config \(swiftLintConfig) --path")
+let isSingleFile = filePath.hasSuffix(".swift")
+
+if isSingleFile {
+    shell("\(swiftlint) autocorrect --config \(swiftLintConfig) --path \(filePath)")
+} else {
+    shell("fd . -0 --full-path \(filePath) -e swift -x \(swiftlint) autocorrect --config \(swiftLintConfig) --path")
+}
