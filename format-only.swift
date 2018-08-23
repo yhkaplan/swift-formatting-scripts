@@ -78,6 +78,7 @@ if isVerbose {
     print(
         """
         Running rule: \(rule)
+
         Disabling rules: \(disabledRules)
         """
     )
