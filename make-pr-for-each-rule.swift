@@ -44,18 +44,18 @@ guard let output = shellOut("swiftformat --rules") else {
 let rules = Set<formatOutput(output)>
     .subtract(disabledRules)
 
-// forEach rule,
-    // print executing rule...
-    // git checkout develop
-    // let branchName = "feature/\(ruleName)"
-    // git checkout -b feature/{rule_name}
-    // run format-only.swift -p Sources
-    // git commit
-    // run format-only.swift -p UnitTests
-    // git commit
-    // run format-only.swift -p IntegrationTests
-    // git commit
-    // git push -u origin branchName
-    // git pr -m "Execute ruleName"
+rules.forEach { rule in
+    print("Formatting \(rule)"
+    let branchName = "feature/\(ruleName)") // TODO: Does / mark work in strings?
+
+    shellOut("git checkout develop")
+    shellOut("git checkout -b \(branchName)")
+
+    shellOut("format-only.swift -p {path from parameter}")
+
+    shellOut("git commit -m Run_\(rule)_on_\(path)")
+    shellOut("git push -u origin \(branchName)")
+    shellOut("git pull-request -m {pr_name}")
+}
 
 print("Finished!")
