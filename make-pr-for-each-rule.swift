@@ -21,7 +21,7 @@ func shellOut(_ command: String) -> String? {
     return String(data: data, encoding: String.Encoding.utf8)
 }
 
-func formatOutput(_ output: String) -> [Rule] {
+func formatOutput(_ output: String) -> Set<Rule> {
     let formattedSubstring = output
         .replacingOccurrences(of: " ", with: "")
         .replacingOccurrences(of: "(disabled)", with: "")
@@ -29,23 +29,24 @@ func formatOutput(_ output: String) -> [Rule] {
         .replacingOccurrences(of: ",,", with: "")
         .dropFirst() // Drop initial comma
 
-    return String(formattedSubstring)
+    // Make substring into array of strings
+    let ruleArray = String(formattedSubstring)
         .components(separatedBy: ",")
-        .map(Rule.init)
+
+    return Set(ruleArray)
 }
 
-// list and format rules
 guard let output = shellOut("swiftformat --rules") else {
     print("Error: no output"); exit(1)
 }
 
-// make array from rules
-// remove disabled rules from .swiftformat file using set?
-let rules = Set<formatOutput(output)>
-    .subtract(disabledRules)
+let disabledRules: Set = ["sortedImports"]
+
+let rules = formatOutput(output)
+    .subtracting(disabledRules)
 
 rules.forEach { rule in
-    print("Formatting \(rule)"
+    print("Formatting \(rule)")
     let branchName = "feature/\(ruleName)") // TODO: Does / mark work in strings?
 
     shellOut("git checkout develop")
@@ -58,4 +59,4 @@ rules.forEach { rule in
     shellOut("git pull-request -m {pr_name}")
 }
 
-print("Finished!")
+print("\nFinished!")
