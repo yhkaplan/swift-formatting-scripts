@@ -36,6 +36,23 @@ func formatOutput(_ output: String) -> Set<Rule> {
     return Set(ruleArray)
 }
 
+var filePath: String?
+
+let args = ProcessInfo.processInfo.arguments
+args.enumerated().forEach { index, arg in
+    switch arg {
+    case "--path", "-p":
+        filePath = args[index + 1]
+
+    default:
+        break
+    }
+}
+
+guard let filePath = filePath else {
+    print("Missing --path/-p flag"); exit(1)
+}
+
 guard let output = shellOut("swiftformat --rules") else {
     print("Error: no output"); exit(1)
 }
@@ -47,16 +64,18 @@ let rules = formatOutput(output)
 
 rules.forEach { rule in
     print("Formatting \(rule)")
-    let branchName = "feature/\(ruleName)") // TODO: Does / mark work in strings?
+    let branchName = "feature/\(rule)" // TODO: Does / mark work in strings?
 
     shellOut("git checkout develop")
     shellOut("git checkout -b \(branchName)")
 
-    shellOut("format-only.swift -p {path from parameter}")
+    shellOut("format-only.swift -p \(filePath)")
 
-    shellOut("git commit -m Run_\(rule)_on_\(path)")
+    let prCommitTitle = "Run_\(rule)_on_\(filePath)"
+
+    shellOut("git commit -m \(prCommitTitle)")
     shellOut("git push -u origin \(branchName)")
-    shellOut("git pull-request -m {pr_name}")
+    shellOut("git pull-request -m \(prCommitTitle)")
 }
 
 print("\nFinished!")
