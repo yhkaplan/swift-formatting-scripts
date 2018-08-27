@@ -1,4 +1,4 @@
 --exclude Pods
 --exclude Carthage
---disable consecutiveSpaces,trailingSpace,numberFormatting,blankLinesAtEndOfScope,blankLinesAtStartOfScope,strongOutlets,unusedArguments,hoistPatternLet,sortedImports,spaceAroundGenerics,trailingCommas,blankLinesAroundMark
+--disable blankLinesAtEndOfScope,blankLinesAtStartOfScope,strongOutlets,unusedArguments,hoistPatternLet,sortedImports,trailingCommas
 
