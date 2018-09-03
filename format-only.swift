@@ -29,7 +29,7 @@ func formatOutput(_ output: String, excluding excludedWord: String) -> String {
         .dropFirst() // Drop initial comma
 
     // Address case when last rule specified
-    if let last = formattedSubstring.last, last  == "," {
+    if let last = formattedSubstring.last, last == "," {
         formattedSubstring = formattedSubstring.dropLast()
     }
 
