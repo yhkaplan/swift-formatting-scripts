@@ -57,7 +57,16 @@ guard let output = shellOut("swiftformat --rules") else {
     print("Error: no output"); exit(1)
 }
 
-let disabledRules: Set = ["sortedImports"]
+let disabledRules: Set = [
+    "blankLinesAtEndOfScope",
+    "blankLinesAtStartOfScope",
+    "strongOutlets",
+    "unusedArguments",
+    "hoistPatternLet",
+    "sortedImports",
+    "trailingCommas",
+    "blankLinesAroundMark"
+]
 
 let rules = formatOutput(output)
     .subtracting(disabledRules)
@@ -69,10 +78,11 @@ rules.forEach { rule in
     shellOut("git checkout develop")
     shellOut("git checkout -b \(branchName)")
 
-    shellOut("format-only.swift -p \(filePath)")
+    shellOut("format-only.swift -p \(filePath) -r \(rule)")
 
     let prCommitTitle = "Run_\(rule)_on_\(filePath)"
 
+    shellOut("git add \(filePath)")
     shellOut("git commit -m \(prCommitTitle)")
     shellOut("git push -u origin \(branchName)")
     shellOut("git pull-request -m \(prCommitTitle)")
