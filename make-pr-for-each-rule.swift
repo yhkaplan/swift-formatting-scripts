@@ -85,7 +85,7 @@ rules.forEach { rule in
     shellOut("git add \(filePath)")
     shellOut("git commit -m \(prCommitTitle)")
     shellOut("git push -u origin \(branchName)")
-    shellOut("git pull-request -m \(prCommitTitle)")
+    shellOut("hub pull-request -m \(prCommitTitle)")
 }
 
 print("\nFinished!")
