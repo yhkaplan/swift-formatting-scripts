@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Loop through modified and added swift files
-git diff --diff-filter=d --staged --name-only | grep -e '\(.*\).swift$' | while read -r line; do
+git diff --diff-filter=d --staged --name-only | grep -e '\(.*\).swift$' | while read -r file; do
   # Run only if word count is smaller than or equal to 500
-  WORD_COUNT=$(wc -l "$line" | tr -dc '0-9')
+  WORD_COUNT=$(wc -l "$file" | tr -dc '0-9')
 
   if [ "$WORD_COUNT" -le 500 ]; then
-    ./bin/format.swift -p "${line}"
+    ./format.swift -p "${file}"
     git add "$line"
   fi
 done
