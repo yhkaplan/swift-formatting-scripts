@@ -7,6 +7,5 @@ git diff --diff-filter=d --staged --name-only | grep -e '\(.*\).swift$' | while 
 
   if [ "$WORD_COUNT" -le 500 ]; then
     ./format.swift -p "${file}"
-    git add "$line"
   fi
 done
