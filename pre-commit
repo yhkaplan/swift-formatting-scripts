@@ -8,4 +8,5 @@ git diff --diff-filter=d --staged --name-only | grep -e '\(.*\).swift$' | while 
   if [ "$WORD_COUNT" -le 500 ]; then
     ./format.swift -p "${file}"
   fi
+  ruby ./auto-add-mark.rb --path "${file}"
 done
