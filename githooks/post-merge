@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# fork from https://gist.githubusercontent.com/betorobson/23e5914b51e844bac5eaa6032d6f3f88/raw/e02ee803af1094a0dbff6c47febe02e1f5cb33b8/post-merge
+
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+run_if_file_changed() {
+  echo "$changed_files" | grep --quiet "$1" && eval "$2"
+}
+
+run_if_file_changed Podfile.lock "bundle exec pod install"
+run_if_file_changed Cartfile.resolved "make rome_download"
