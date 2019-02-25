@@ -12,6 +12,16 @@ This is a convenient script to run both Swiftformat and Swiftlint.
 
 > Add `// MARK: - {protocol name}` above extensions conforming to protocols
 
+# Githooks
+
+### post-checkout & post-merge
+
+Run `pod install` and `rome download` after checkout and merge when needed.
+
+### pre-commit
+
+Format changed Swift files and add call auto-add-mark.rb
+
 ## Setting up
 
 `brew install fd` (a super-performant Rust version of find)
